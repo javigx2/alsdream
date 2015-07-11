@@ -1,5 +1,7 @@
 """
-Splits input file into multiple files: one file by patient
+Splits ALS Stratification challenge input file into multiple files
+
+One file by patient
 """
 
 import sys
@@ -21,6 +23,6 @@ if __name__ == "__main__":
 
         for feature in input_data_dict[subjectId]:
             for line in input_data_dict[subjectId][feature]:
-                ofd.write(line)
+                ofd.write("%s\n" %line)
 
         ofd.close()

@@ -2,17 +2,22 @@ import sys
 
 
 def read_input_file(filename):
+
+    with open(filename, "r") as fd:
+
+        return _parse_input_file(fd)
+
+
+def _parse_input_file(line_iterator):
     """
     Parse the input file
 
     Return the input as a dictionary: { subject_id: { feature_name: content }}
     """
 
-    fd = open(filename, "r")
-
     input_data = {}
 
-    for line in fd:
+    for line in line_iterator:
 
         try:
             subject_id, form_name, feature_name, feature_value, feature_unit, feature_delta = [x.strip("\"") for x in line.strip().split("|")]
@@ -27,6 +32,5 @@ def read_input_file(filename):
             print(e)
             sys.stderr.write(line)
 
-    fd.close()
 
     return input_data
