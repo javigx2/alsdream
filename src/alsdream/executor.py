@@ -34,7 +34,7 @@ class ALSExecutor():
 
         self.execution_md5 = hashlib.md5(str(str(time.time())+str(participantId)+str(random.random())).encode("utf-8")).hexdigest()
 
-        self.patient_data = {}
+        self.patient_data = alsio.read_input_file(globals.COMPLETE_DATASET_FILE[subchallenge], store_subjectId=True)
 
         self.temporal_directory = self.create_temporal_directory()
 
@@ -205,15 +205,18 @@ class ALSExecutor():
         # A specific execution for each input patient
 
         # First, execute selector for each subject
-        for patient_input_file in os.listdir(globals.INPUT_FILE_PATH)[0:3]:
+        for patient_input_file in os.listdir(globals.INVIDIAL_DATASET_FILES[self.subchallenge]):
 
-            self.patient_data = alsio.read_input_file(os.sep.join([globals.INPUT_FILE_PATH, patient_input_file]))
+            #self.patient_data = alsio.read_input_file(os.sep.join([globals.INPUT_FILE_PATH, patient_input_file]))
 
             subjectId = subjectId_re.search(patient_input_file).group(1)
 
             print(subjectId)
 
-            INPUT1 = globals.INPUT_FILE_PATH+os.sep+patient_input_file
+            if int(subjectId) not in set([574500,149209,80140,533771,704508]):
+                continue
+
+            INPUT1 = globals.INVIDIAL_DATASET_FILES[self.subchallenge]+os.sep+patient_input_file
             OUTPUT1 = os.sep.join([self.temporal_directory, "output1.%s.txt" % subjectId])
 
             # CREATE THE SPECIFIC ENVIRONMENT WITH unshare
@@ -236,15 +239,21 @@ class ALSExecutor():
 
             # Recreate input file 2
             INPUT2 = os.sep.join([self.temporal_directory, "input2.%s.txt" % subjectId])
+            print(INPUT2)
 
         # Execute the predictor program for all the subjects, N times
         for repetition in range(11):
 
+            print("REP: ",repetition)
+
             predicted_values = {}
 
-            for patient_input_file in os.listdir(globals.INPUT_FILE_PATH)[0:3]:
+            for patient_input_file in os.listdir(globals.INVIDIAL_DATASET_FILES[self.subchallenge]):
                 
                 subjectId = subjectId_re.search(patient_input_file).group(1)
+
+                if int(subjectId) not in set([574500,149209,80140,533771,704508]):
+                    continue
 
                 self.recreate_input_file2(subjectId=subjectId,
                                           selected_features=selected_features,
@@ -270,7 +279,6 @@ class ALSExecutor():
 
                 predicted_values[subjectId] = patient_predicted_values
             
-
             # PUT ALL THE PREDICTIONS INTO A SINGLE FILE
             prediction_file = self.create_prediction_file(predicted_values)
 
@@ -285,13 +293,13 @@ class ALSExecutor():
             pcc=None
 
             for line in scoring_fd:
-                m = re.match("%s\s+(\S+)\s+(\S+)" % self.execution_md5, line)
+                m = re.search("%s\s+(\S+)\s+(\S+)\s+(\S+)" % self.execution_md5, line)
                 if m:
-                    ci, pcc = m.group(1), m.group(2)
-                    logging.info(" Score CI: %s" % ci)
-                    logging.info(" Score PCC: %s" % pcc)
+                    ci1, ci2, ci3 = m.group(1), m.group(2), m.group(3)
+                    ##logging.info(" Score CI: %s" % ci)
+                    ##logging.info(" Score PCC: %s" % pcc)
 
-            print((repetition, ci, pcc))
+            print((repetition, ci1, ci2, ci3))
 
         # TAR ALL FILES
         with tarfile.open(os.sep.join([globals.BACKUP_DIRECTORY, "%s.tar.gz" % self.execution_md5]), "w:gz") as tar:

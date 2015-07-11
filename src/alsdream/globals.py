@@ -3,12 +3,18 @@ import os
 
 BASEDIR = "/home/javi/DREAM_TEMP/"
 
-
 # Stores all the temporal files during a submission execution
 TEMPORAL_DIRECTORY = BASEDIR+os.sep+"EXECUTION_FILES/"
 
 # Directory where input files are
-INPUT_FILE_PATH = "/home/javi/DREAM_ALS_FINAL/data/data/all_forms_PROACT/"
+INVIDIAL_DATASET_FILES = {
+							"PROACT_survival": "/home/javi/DREAM_ALS_FINAL/data/data/all_forms_PROACT/",
+							"PROACT_progression:": "",
+							"registries_survival": "",
+							"registries_progression": ""
+						}
+
+INPUT_FILE_PATH = ""
 
 COMPLETE_DATASET_FILE = {
 						"PROACT_survival": "/home/javi/DREAM_ALS_FINAL/data/data/all_forms_PROACT.txt",
