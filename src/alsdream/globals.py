@@ -8,19 +8,19 @@ TEMPORAL_DIRECTORY = BASEDIR+os.sep+"EXECUTION_FILES/"
 
 # Directory where input files are
 INVIDIAL_DATASET_FILES = {
-							"PROACT_survival": "/home/javi/DREAM_ALS_FINAL/data/data/all_forms_PROACT/",
-							"PROACT_progression:": "",
-							"registries_survival": "",
-							"registries_progression": ""
+							"proact_survival": "/home/javi/DREAM_ALS_FINAL/data/data/all_forms_PROACT/",
+							"proact_progression": "",
+							"reg_survival": "",
+							"reg_progression": ""
 						}
 
 INPUT_FILE_PATH = ""
 
 COMPLETE_DATASET_FILE = {
-						"PROACT_survival": "/home/javi/DREAM_ALS_FINAL/data/data/all_forms_PROACT.txt",
-						"PROACT_progression:": "/home/javi/DREAM_ALS_FINAL/data/data/all_forms_PROACT.txt",
-						"registries_survival": "",
-						"registries_progression": ""
+						"proact_survival": "/home/javi/DREAM_ALS_FINAL/data/data/all_forms_PROACT.txt",
+						"proact_progression:": "/home/javi/DREAM_ALS_FINAL/data/data/all_forms_PROACT.txt",
+						"reg_survival": "",
+						"reg_progression": ""
 						}
 
 # Directory where submission predictions are stored
@@ -34,17 +34,17 @@ SCORING_SCRIPTS_DIRECTORY = BASEDIR+os.sep+"SCORING"
 
 
 SUBCHALLENGE_SCORING_SCRIPT = {
-								"PROACT_survival": "DREAM10_ALS_scoring_survival.pl",
-								"PROACT_progression:": "",
-								"registries_survival": "",
-								"registries_progression": ""
+								"proact_survival": "DREAM10_ALS_scoring_survival.pl",
+								"proact_progression:": "",
+								"reg_survival": "",
+								"reg_progression": ""
 								}
 
 SUBCHALLENGE_GOLD_STANDARD = {
-								"PROACT_survival": "/home/javi/DREAM_ALS_FINAL/data/data/surv_response_PROACT.smallset.txt",
-								"PROACT_progression": "/home/javi/DREAM_ALS_FINAL/data/data/ALSFRS_slope_PROACT.smallset.txt",
-								"registries_survival": "",
-								"registries_progression": ""
+								"proact_survival": "/home/javi/DREAM_ALS_FINAL/data/data/surv_response_PROACT.smallset.txt",
+								"proact_progression": "/home/javi/DREAM_ALS_FINAL/data/data/ALSFRS_slope_PROACT.smallset.txt",
+								"reg_survival": "",
+								"reg_progression": ""
 								}
 
 # Number of maximum features to limit

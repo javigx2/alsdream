@@ -211,10 +211,10 @@ class ALSExecutor():
 
             subjectId = subjectId_re.search(patient_input_file).group(1)
 
-            print(subjectId)
+            #print(subjectId)
 
-            if int(subjectId) not in set([574500,149209,80140,533771,704508]):
-                continue
+            #if int(subjectId) not in set([574500,149209,80140,533771,704508]):
+            #    continue
 
             INPUT1 = globals.INVIDIAL_DATASET_FILES[self.subchallenge]+os.sep+patient_input_file
             OUTPUT1 = os.sep.join([self.temporal_directory, "output1.%s.txt" % subjectId])
@@ -239,12 +239,11 @@ class ALSExecutor():
 
             # Recreate input file 2
             INPUT2 = os.sep.join([self.temporal_directory, "input2.%s.txt" % subjectId])
-            print(INPUT2)
 
         # Execute the predictor program for all the subjects, N times
         for repetition in range(11):
 
-            print("REP: ",repetition)
+            #print("REP: ",repetition)
 
             predicted_values = {}
 
@@ -252,14 +251,15 @@ class ALSExecutor():
                 
                 subjectId = subjectId_re.search(patient_input_file).group(1)
 
-                if int(subjectId) not in set([574500,149209,80140,533771,704508]):
-                    continue
+                #if int(subjectId) not in set([574500,149209,80140,533771,704508]):
+                #    continue
 
                 self.recreate_input_file2(subjectId=subjectId,
                                           selected_features=selected_features,
                                           output_filename=INPUT2,
                                           randomize_numbers=repetition>0)
 
+                INPUT2 = os.sep.join([self.temporal_directory, "input2.%s.txt" % subjectId])
                 OUTPUT2 = os.sep.join([self.temporal_directory, "output2.%s.txt" % subjectId])  # Not necessary
 
                 subprocess.call(self.format_predictor_call(INPUT2,
