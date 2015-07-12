@@ -12,9 +12,8 @@ import subprocess
 
 import shutil
 
-import globals
-
-import alsio
+from . import globals
+from . import alsio
 
 
 REMOVE_TEMPORAL_FILES = False
@@ -36,7 +35,6 @@ class ALSExecutor():
         logging.info("EXECUTION CODE: exec_%s" %self.execution_md5)
 
         logging.info("Reading input data...")
-        self.patient_data = alsio.read_input_file(globals.COMPLETE_DATASET_FILE[subchallenge], store_subjectId=True)
 
         self.temporal_directory = self.create_temporal_directory()
 
@@ -163,11 +161,13 @@ class ALSExecutor():
 
         if randomize_numbers is False:
             for selected_feature in selected_features:
-                if selected_feature in self.patient_data[subjectId]:
-                    ofd.write("%s\n" % "|".join(self.patient_data[subjectId][selected_feature.lower()]))
+                if selected_feature in self.complete_dataset[subjectId]:
+                    for line in self.complete_dataset[subjectId][selected_feature.lower()]:
+                        ofd.write("%s\n" %alsio.format_input_line(subjectId=subjectId, line=line))
+                    #ofd.write("%s\n" %self.complete_dataset[subjectId][selected_feature.lower()])
         else:
             for selected_feature in selected_features:
-                if selected_feature in self.patient_data[subjectId]:
+                if selected_feature in self.complete_dataset[subjectId]:
                     for line in random.choice(self.features2values[selected_feature.lower()]):
                         ofd.write("%s\n" %alsio.format_input_line(subjectId=subjectId, line=line))
 
@@ -205,7 +205,9 @@ class ALSExecutor():
 
     def execute(self):
 
-        subjectId_re = re.compile("(.+)\.txt")        
+        subjectId_re = re.compile("(.+)\.txt")     
+
+        subjects_processed = 0
 
         # A specific execution for each input patient
 
@@ -215,6 +217,10 @@ class ALSExecutor():
             #self.patient_data = alsio.read_input_file(os.sep.join([globals.INPUT_FILE_PATH, patient_input_file]))
 
             subjectId = subjectId_re.search(patient_input_file).group(1)
+
+            if subjects_processed>10:
+                sys.stderr.write("subjects done: %s" %subjects_processed)
+            subjects_processed += 1
 
             #print(subjectId)
 
