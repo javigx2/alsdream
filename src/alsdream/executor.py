@@ -33,7 +33,9 @@ class ALSExecutor():
         self.subchallenge = subchallenge
 
         self.execution_md5 = hashlib.md5(str(str(time.time())+str(participantId)+str(random.random())).encode("utf-8")).hexdigest()
+        logging.info("EXECUTION CODE: exec_%s" %self.execution_md5)
 
+        logging.info("Reading input data...")
         self.patient_data = alsio.read_input_file(globals.COMPLETE_DATASET_FILE[subchallenge], store_subjectId=True)
 
         self.temporal_directory = self.create_temporal_directory()
@@ -114,6 +116,9 @@ class ALSExecutor():
         First line is: "cluster", cluster_number
         Then: feature_name, score
         """
+
+        if not os.path.exists(filename):
+            raise IOError("The selector.sh output %s is not found" %filename)
 
         selected_features = {}
 
@@ -229,8 +234,8 @@ class ALSExecutor():
 
             try:
                 subprocess.call(self.format_selector_call(input_file_path=INPUT1,
-                                                          output_file_path=OUTPUT1),
-                                timeout=globals.SELECTOR_TIMEOUT)
+                                                          output_file_path=OUTPUT1))
+                                #timeout=globals.SELECTOR_TIMEOUT)
             except subprocess.TimeoutExpired:
                 raise ValueError("The selector program took too many time to be executed")
 
@@ -263,8 +268,8 @@ class ALSExecutor():
                 OUTPUT2 = os.sep.join([self.temporal_directory, "output2.%s.txt" % subjectId])  # Not necessary
 
                 subprocess.call(self.format_predictor_call(INPUT2,
-                                                        OUTPUT2),
-                                timeout=globals.PREDICTOR_TIMEOUT)
+                                                        OUTPUT2))
+                                #timeout=globals.PREDICTOR_TIMEOUT)
 
                 try:
                     pfd = open(OUTPUT2,"r")
